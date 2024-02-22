@@ -50,7 +50,7 @@ variable "aws_region" {
 }
 
 # Windows Specific Variables
-# 
+#
 # Supported Values:
 # - 2012-R2_RTM-English-64Bit-Base
 # - 2016-English-Full-Base

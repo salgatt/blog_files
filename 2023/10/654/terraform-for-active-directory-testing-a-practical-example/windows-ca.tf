@@ -42,8 +42,8 @@ resource "aws_instance" "windows-server-ca" {
   vpc_security_group_ids = [aws_security_group.aws-windows-sg.id]
   source_dest_check = false
   key_name = aws_key_pair.key_pair.key_name
-  user_data = data.template_file.windows-ca-userdata.rendered 
-  
+  user_data = data.template_file.windows-ca-userdata.rendered
+
   # root disk
   root_block_device {
     volume_size           = var.windows_root_volume_size
@@ -51,7 +51,7 @@ resource "aws_instance" "windows-server-ca" {
     delete_on_termination = true
     encrypted             = true
   }
-  
+
   tags = {
     Name        = "windows-server-ca"
     Environment = var.app_environment
