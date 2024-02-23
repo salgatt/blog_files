@@ -1,0 +1,28 @@
+name: Run Makefile on Pull Requests and Main Pushes
+
+on:
+    pull_request:  # Trigger on any pull request
+      paths: # Trigger only when files in these paths change
+        - '.github/workflows/run-makefile.yml'
+        - 'pipeline_app/**'
+    push:
+      branches: [ main ] # Trigger on pushes to the main branch
+      paths: # Trigger only when files in these paths change
+        - '.github/workflows/run-makefile.yml'
+        - 'pipeline_app/**'
+
+jobs:
+  execute_makefile:
+    runs-on: ubuntu-latest  # Specify the runner OS
+    steps:
+      - uses: actions/checkout@v3  # Checkout the repository
+      - name: Set up Python with your Makefile's version
+        uses: actions/setup-python@v4  # Example with Python, adapt as needed
+        with:
+          python-version: '3.10.6'  # Replace with the version your Makefile uses
+
+      - name: Install dependencies
+        run: make setup-pythonenv venv  # Assuming your Makefile targets
+
+      - name: Execute pre-commit checks
+        run: make precommit

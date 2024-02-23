@@ -21,4 +21,3 @@ app_environment = "test"
 # Active Directory Settings
 windows_ad_domain_name = "2019.adfs.cyral.local"
 windows_ad_safe_password = "abc123...xyz789"
-

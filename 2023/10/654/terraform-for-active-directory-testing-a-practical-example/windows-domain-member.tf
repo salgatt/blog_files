@@ -33,7 +33,7 @@ resource "aws_instance" "windows-server-member" {
   source_dest_check = false
   key_name = aws_key_pair.key_pair.key_name
   user_data = data.template_file.windows-member-userdata.rendered
-  
+
   # root disk
   root_block_device {
     volume_size           = var.windows_root_volume_size
@@ -41,7 +41,7 @@ resource "aws_instance" "windows-server-member" {
     delete_on_termination = true
     encrypted             = true
   }
-  
+
   tags = {
     Name        = "windows-server-member"
     Environment = var.app_environment

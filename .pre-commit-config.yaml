@@ -1,0 +1,20 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.5.0  # Choose a stable version
+  hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
+- repo: https://github.com/psf/black
+  rev: 24.2.0  # Choose a stable version of Black
+  hooks:
+    - id: black
+- repo: https://github.com/pycqa/flake8
+  rev: 7.0.0  # Choose a stable version of flake8
+  hooks:
+    - id: flake8
+- repo: https://github.com/PyCQA/bandit
+  rev: 1.7.7  # Choose a stable version of bandit
+  hooks:
+    - id: bandit
+      args:  ["-c", ".bandit.yml"] # Example config file name
