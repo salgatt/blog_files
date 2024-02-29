@@ -6,7 +6,7 @@ resource "kubernetes_deployment" "pipeline_app_ubuntu" {
     labels = {
       apps = "ubuntu"
     }
-    name      = "ubuntu"
+    name      = "ubuntu-app"
     namespace = "application-pipeline"
   }
   spec {
