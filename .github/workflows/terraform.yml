@@ -42,7 +42,7 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init -backend-config="bucket=${TF_BACKEND_S3_BUCKET}" -backend-config="dynamodb_table=${TF_BACKEND_DYNAMO_TABLE}" -backend-config="region=${AWS_REGION}"
+      run: terraform init -backend-config="bucket=$TF_BACKEND_S3_BUCKET" -backend-config="dynamodb_table=$TF_BACKEND_DYNAMO_TABLE" -backend-config="region=$AWS_REGION"
 
     - name: Terraform fmt
       id: fmt
