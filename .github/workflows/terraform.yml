@@ -11,6 +11,7 @@ env:
   TF_BACKEND_DYNAMO_TABLE: ${{ secrets.TF_BACKEND_DYNAMO_TABLE }}
   TF_BACKEND_S3_BUCKET: ${{ secrets.TF_BACKEND_DYNAMO_TABLE }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
+  TESTING_SECRET: ${{ secrets.TESTING_SECRET }}
 
 on:
     # Triggers the workflow on push request on the main branch for changes in the specified paths.
@@ -39,6 +40,10 @@ jobs:
       uses: actions/checkout@main
 
     - uses: hashicorp/setup-terraform@v2
+
+    - name: Testing Secret
+      id: init
+      run: echo
 
     - name: Terraform Init
       id: init
@@ -116,6 +121,7 @@ jobs:
     #           body: output
     #         })
     #       }
+    #
 
     - name: Terraform Apply
       id: apply
