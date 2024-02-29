@@ -1,0 +1,121 @@
+name: Terraform plan and validate
+
+env:
+  tf_actions_working_dir: 'terraform'
+  TF_VAR_cluster_endpoint: ${{ secrets.TF_VAR_CLUSTER_ENDPOINT }}
+  TF_VAR_cluster_user_token: ${{ secrets.TF_VAR_CLUSTER_USER_TOKEN }}
+  TF_VAR_cluster_ca_cert: ${{ secrets.TF_VAR_CLUSTER_CA_CERT }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_BACKEND_DYNAMO_TABLE: ${{ secrets.TF_BACKEND_DYNAMO_TABLE }}
+  TF_BACKEND_S3_BUCKET: ${{ secrets.TF_BACKEND_DYNAMO_TABLE }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+on:
+    # Triggers the workflow on push request on the main branch for changes in the specified paths.
+    push:
+      branches:
+        - main
+      paths:
+        - '.github/workflows/terraform.yml'
+        - 'pipeline_app/*.tf'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel.
+jobs:
+  # This workflow contains a single job called "build".
+  build:
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+ #   permissions:
+ #     pull-requests: write
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
+    - name: Checkout main
+      uses: actions/checkout@main
+
+    - uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init
+      id: init
+      run: terraform init -backend-config="bucket=${TF_BACKEND_S3_BUCKET}" -backend-config="dynamodb_table=${TF_BACKEND_DYNAMO_TABLE}" -backend-config="region=${AWS_REGION}"
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: true
+
+    # - uses: actions/github-script@v6
+    #   if: github.event_name == 'pull_request'
+    #   env:
+    #     PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #     script: |
+    #       // 1. Retrieve existing bot comments for the PR
+    #       const { data: comments } = await github.rest.issues.listComments({
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         issue_number: context.issue.number,
+    #       })
+    #       const botComment = comments.find(comment => {
+    #         return comment.user.type === 'Bot' && comment.body.includes('Terraform Format and Style')
+    #       })
+
+    #       // 2. Prepare format of the comment
+    #       const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+    #       #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+    #       #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+    #       <details><summary>Validation Output</summary>
+
+    #       \`\`\`\n
+    #       ${{ steps.validate.outputs.stdout }}
+    #       \`\`\`
+
+    #       </details>
+
+    #       #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+    #       <details><summary>Show Plan</summary>
+
+    #       \`\`\`\n
+    #       ${process.env.PLAN}
+    #       \`\`\`
+
+    #       </details>
+
+    #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+    #       // 3. If we have a comment, update it, otherwise create a new one
+    #       if (botComment) {
+    #         github.rest.issues.updateComment({
+    #           owner: context.repo.owner,
+    #           repo: context.repo.repo,
+    #           comment_id: botComment.id,
+    #           body: output
+    #         })
+    #       } else {
+    #         github.rest.issues.createComment({
+    #           issue_number: context.issue.number,
+    #           owner: context.repo.owner,
+    #           repo: context.repo.repo,
+    #           body: output
+    #         })
+    #       }
+
+    # - name: Terraform Apply
+    #   id: apply
+    #   run: terraform apply -no-color -auto-approve

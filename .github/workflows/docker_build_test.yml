@@ -1,0 +1,34 @@
+name: Build, Run, and Test Docker Image
+
+on:
+    pull_request:  # Trigger on any pull request
+      paths: # Trigger only when files in these paths change
+        - '.github/workflows/docker_build_test.yml'
+        - 'pipeline_app/**'
+    push:
+      branches: [ main ] # Trigger on pushes to the main branch
+      paths: # Trigger only when files in these paths change
+        - '.github/workflows/docker_build_test.yml'
+        - 'pipeline_app/**'
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t pipeline_app pipeline_app
+
+      - name: Run Docker Container
+        run: docker run -d -p 8000:8000 pipeline_app
+
+      - name: Test Status Page
+        run: |
+          sleep 5  # Allow container to start
+          curl --fail http://localhost:8000/status
+
+      - name: Test Index Page
+        run: |
+          sleep 5  # Allow container to start
+          curl --fail http://localhost:8000/
