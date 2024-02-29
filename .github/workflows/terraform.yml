@@ -42,7 +42,7 @@ jobs:
     - uses: hashicorp/setup-terraform@v2
 
     - name: Testing Secret
-      id: init
+      id: secret-testing
       run: echo
 
     - name: Terraform Init
