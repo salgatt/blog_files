@@ -1,7 +1,7 @@
 name: Terraform plan and validate
 
 env:
-  tf_actions_working_dir: 'terraform'
+  tf_actions_working_dir: 'pipeline_app'
   TF_VAR_cluster_endpoint: ${{ secrets.TF_VAR_CLUSTER_ENDPOINT }}
   TF_VAR_cluster_user_token: ${{ secrets.TF_VAR_CLUSTER_USER_TOKEN }}
   TF_VAR_cluster_ca_cert: ${{ secrets.TF_VAR_CLUSTER_CA_CERT }}
