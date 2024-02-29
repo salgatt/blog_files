@@ -16,7 +16,7 @@ on:
     # Triggers the workflow on push request on the main branch for changes in the specified paths.
     push:
       branches:
-        - main
+        - testing_terraform
       paths:
         - '.github/workflows/terraform.yml'
         - 'pipeline_app/*.tf'
