@@ -33,6 +33,11 @@ resource "kubernetes_stateful_set" "example" {
       }
 
       spec {
+        security_context {
+          run_as_user = 1000
+          fs_group    = 1000
+        }
+
         container {
           image = "registry.digitalocean.com/${var.digital_ocean_registry}/pipeline_app"
           name  = "pipeline-app"
@@ -59,6 +64,14 @@ resource "kubernetes_stateful_set" "example" {
 
             initial_delay_seconds = 30
             period_seconds        = 5
+          }
+          security_context {
+            run_as_non_root = true
+            run_as_user     = 1001
+            capabilities {
+              add  = ["NET_BIND_SERVICE"]
+              drop = ["ALL"]
+            }
           }
         }
       }
