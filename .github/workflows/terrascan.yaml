@@ -16,3 +16,4 @@ jobs:
         find_vulnerabilities: true
         config_path: .github/workflows/terrascan.toml
         iac_dir: ./pipeline_app
+        non_recursive: true
