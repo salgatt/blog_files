@@ -35,17 +35,17 @@ variable "private_subnet_cidr" {
 
 # AWS Credentials
 variable "aws_access_key" {
-  type = string
+  type        = string
   description = "AWS access key"
 }
 
 variable "aws_secret_key" {
-  type = string
+  type        = string
   description = "AWS secret key"
 }
 
 variable "aws_region" {
-  type = string
+  type        = string
   description = "AWS region"
 }
 
@@ -68,11 +68,11 @@ variable "windows_instance_type" {
   default     = "t2.micro"
 }
 
-variable "windows_associate_public_ip_address" {
-  type        = bool
-  description = "Associate a public IP address to the EC2 instance"
-  default     = true
-}
+# variable "windows_associate_public_ip_address" {
+#   type        = bool
+#   description = "Associate a public IP address to the EC2 instance"
+#   default     = true
+# }
 
 variable "windows_root_volume_size" {
   type        = number
@@ -86,37 +86,37 @@ variable "windows_root_volume_type" {
   default     = "gp2"
 }
 
-variable "windows_instance_name" {
-  type        = string
-  description = "EC2 instance name for Windows Server"
-  default     = "tfwinsrv01"
-}
+# variable "windows_instance_name" {
+#   type        = string
+#   description = "EC2 instance name for Windows Server"
+#   default     = "tfwinsrv01"
+# }
 
 variable "windows_ad_domain_name" {
-  type = string
+  type        = string
   description = "Active Directory Domain Name"
-  default = "2019.adfs.cyral.local"
+  default     = "2019.adfs.cyral.local"
 }
 
 variable "windows_ad_nebios_name" {
-  type = string
+  type        = string
   description = "Active Directory NetBIOS Name"
-  default = "ADFS"
+  default     = "ADFS"
 }
 
 variable "windows_ad_safe_password" {
-  type = string
+  type        = string
   description = "Active Directory DSRM Password"
 }
 
 variable "windows_ad_user_name" {
-  type = string
+  type        = string
   description = "Username used for the local Administrator"
-  default = "Administrator"
+  default     = "Administrator"
 }
 
 variable "windows_domain_member_count" {
-  type = number
+  type        = number
   description = "Number of domain members to add to this domain"
-  default = "2"
+  default     = "2"
 }
