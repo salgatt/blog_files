@@ -1,0 +1,71 @@
+name: Terraform plan and validate
+
+env:
+  tf_actions_working_dir: 'pipeline_app'
+  TF_VAR_cluster_endpoint: ${{ secrets.TF_VAR_CLUSTER_ENDPOINT }}
+  TF_VAR_cluster_user_token: ${{ secrets.TF_VAR_CLUSTER_USER_TOKEN }}
+  TF_VAR_cluster_ca_cert: ${{ secrets.TF_VAR_CLUSTER_CA_CERT }}
+  TF_VAR_digital_ocean_registry: ${{ secrets.DO_REGISTRY_NAME }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_BACKEND_DYNAMO_TABLE: ${{ secrets.TF_BACKEND_DYNAMO_TABLE }}
+  TF_BACKEND_S3_BUCKET: ${{ secrets.TF_BACKEND_S3_BUCKET }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  TESTING_SECRET: ${{ secrets.TESTING_SECRET }}
+  TESTING_VARIABLE: ${{ secrets.TESTING_VARIABLE}}
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/terraform.yml'
+      - 'pipeline_app/*.tf'
+  pull_request:
+    branches:
+      - main  # Assuming you want to run checks on PRs targeting main
+    paths:
+      - '.github/workflows/terraform.yml'
+      - 'pipeline_app/*.tf'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel.
+jobs:
+  # This workflow contains a single job called "build".
+  build:
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+ #   permissions:
+ #     pull-requests: write
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
+    - name: Checkout main
+      uses: actions/checkout@main
+
+    - uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init
+      id: init
+      run: terraform init -backend-config="bucket=$TF_BACKEND_S3_BUCKET" -backend-config="dynamodb_table=$TF_BACKEND_DYNAMO_TABLE" -backend-config="region=$AWS_REGION"
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: true
+
+    - name: Terraform Apply
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: terraform apply -no-color -auto-approve

@@ -15,14 +15,15 @@ EOF
 
 # Create EC2 Instance
 resource "aws_instance" "windows-server-dc" {
-  ami = data.aws_ami.windows-server.id
-  instance_type = var.windows_instance_type
-  subnet_id = aws_subnet.public-subnet.id
+  ami                    = data.aws_ami.windows-server.id
+  instance_type          = var.windows_instance_type
+  subnet_id              = aws_subnet.public-subnet.id
   vpc_security_group_ids = [aws_security_group.aws-windows-sg.id]
-  source_dest_check = false
-  key_name = aws_key_pair.key_pair.key_name
-  user_data = data.template_file.windows-dc-userdata.rendered
-  get_password_data = true
+  source_dest_check      = false
+  key_name               = aws_key_pair.key_pair.key_name
+  user_data              = data.template_file.windows-dc-userdata.rendered
+  get_password_data      = true
+  monitoring             = true
 
   # root disk
   root_block_device {

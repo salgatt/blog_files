@@ -1,0 +1,19 @@
+on: [push]
+
+jobs:
+  terrascan_job:
+    runs-on: ubuntu-latest
+    name: terrascan-action
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Run Terrascan
+      id: terrascan
+      uses: tenable/terrascan-action@main
+      with:
+        iac_type: terraform
+        iac_version: v14
+        find_vulnerabilities: true
+        config_path: .github/workflows/terrascan.toml
+        iac_dir: ./pipeline_app
+        non_recursive: true
