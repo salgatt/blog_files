@@ -23,6 +23,7 @@ resource "aws_instance" "windows-server-dc" {
   key_name               = aws_key_pair.key_pair.key_name
   user_data              = data.template_file.windows-dc-userdata.rendered
   get_password_data      = true
+  monitoring             = true
 
   # root disk
   root_block_device {

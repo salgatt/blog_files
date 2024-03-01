@@ -43,6 +43,7 @@ resource "aws_instance" "windows-server-ca" {
   source_dest_check      = false
   key_name               = aws_key_pair.key_pair.key_name
   user_data              = data.template_file.windows-ca-userdata.rendered
+  monitoring             = true
 
   # root disk
   root_block_device {
