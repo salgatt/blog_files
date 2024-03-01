@@ -34,19 +34,19 @@ jobs:
           curl --fail http://localhost:8000/
 
       - name: Install doctl
-        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DO_API_TOKEN }}
 
       - name: Login to the Docker Registry
-        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: doctl registry login
 
       - name: Tag Docker Image
-        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: docker tag pipeline_app:latest registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/pipeline_app:latest
 
       - name: Push Image to Docker Registry
-        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: docker push registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/pipeline_app:latest
