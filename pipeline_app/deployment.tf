@@ -2,6 +2,10 @@ variable "digital_ocean_registry" {
   type = string
 }
 
+variable "digital_ocean_image_pull_secret_name" {
+  type = string
+}
+
 data "kubernetes_namespace" "application_pipeline" {
   metadata {
     name = "application-pipeline"
@@ -36,6 +40,10 @@ resource "kubernetes_stateful_set" "example" {
         security_context {
           run_as_user = 1000
           fs_group    = 1000
+        }
+
+        image_pull_secrets {
+          name = var.digital_ocean_image_pull_secret_name
         }
 
         container {

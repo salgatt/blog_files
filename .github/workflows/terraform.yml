@@ -6,6 +6,7 @@ env:
   TF_VAR_cluster_user_token: ${{ secrets.TF_VAR_CLUSTER_USER_TOKEN }}
   TF_VAR_cluster_ca_cert: ${{ secrets.TF_VAR_CLUSTER_CA_CERT }}
   TF_VAR_digital_ocean_registry: ${{ secrets.DO_REGISTRY_NAME }}
+  TF_VAR_digital_ocean_image_pull_secret_name: ${{ secrets.DO_REGISTRY_SECRET_NAME }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
