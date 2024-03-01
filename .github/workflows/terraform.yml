@@ -14,19 +14,19 @@ env:
   TESTING_SECRET: ${{ secrets.TESTING_SECRET }}
   TESTING_VARIABLE: ${{ secrets.TESTING_VARIABLE}}
 
-  on:
-    push:
-      branches:
-        - main
-      paths:
-        - '.github/workflows/terraform.yml'
-        - 'pipeline_app/*.tf'
-    pull_request:
-      branches:
-        - main  # Assuming you want to run checks on PRs targeting main
-      paths:
-        - '.github/workflows/terraform.yml'
-        - 'pipeline_app/*.tf'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/terraform.yml'
+      - 'pipeline_app/*.tf'
+  pull_request:
+    branches:
+      - main  # Assuming you want to run checks on PRs targeting main
+    paths:
+      - '.github/workflows/terraform.yml'
+      - 'pipeline_app/*.tf'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
