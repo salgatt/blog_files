@@ -15,3 +15,4 @@ jobs:
         iac_version: v14
         find_vulnerabilities: true
         config_path: .github/workflows/terrascan.toml
+        iac_dir: ./pipeline_app
