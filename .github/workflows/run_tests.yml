@@ -15,12 +15,13 @@ jobs:
   execute_makefile:
     runs-on: ubuntu-latest  # Specify the runner OS
     steps:
-      - uses: actions/checkout@v3  # Checkout the repository
+      - uses: actions/checkout@v4  # Checkout the repository
       - name: Set up Python with your Makefile's version
-        uses: actions/setup-python@v4  # Example with Python, adapt as needed
+        uses: actions/setup-python@v5  # Example with Python, adapt as needed
         with:
-          python-version: '3.10.6'  # Replace with the version your Makefile uses
-
+          python-version: '3.13.3'  # Replace with the version your Makefile uses
+      - uses: hashicorp/setup-terraform@v3
+      
       - name: Install dependencies
         run: make setup-pythonenv venv tflint  # Assuming your Makefile targets
 
