@@ -12,14 +12,14 @@ COPY templates /app/templates
 # Install any needed packages specified in requirements.txt
 # Delete the requirements file
 COPY requirements.txt /app
-RUN pip install --no-cache-dir -r /app/requirements.txt \
-    rm -f /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN rm -f /app/requirements.txt
 
 # Make port 5000 available to the world outside this container
 EXPOSE 8000
 
 # Define environment variable
-ENV NAME World
+ENV NAME=World
 
 # Run app.py when the container launches
 CMD ["gunicorn", "-b", "0.0.0.0:8000", "app:app"]
