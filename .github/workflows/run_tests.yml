@@ -27,3 +27,4 @@ jobs:
 
       - name: Execute pre-commit checks
         run: make precommit
+        
